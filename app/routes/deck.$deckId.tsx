@@ -1,10 +1,8 @@
 import { json, LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { convertToDeckStats, DeckStats } from "~/convertDeckStats";
 import { SoulGenerationChart } from "~/components/SoulGenerationChart";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { ElevenYearCurveChart } from "~/components/ElevenYearCurveChart";
 
 // Calling the API from the server to avoid CORS issues
 export async function loader({ params }: LoaderArgs) {
@@ -19,16 +17,22 @@ export default function KryptikDeckView() {
     <div>
       <h1>{deckStats?.name}</h1>
       <h3>by {deckStats.creator}</h3>
-      <div className={"w-1/2 block m-auto"}>
-        <h2 className={"text-center"}>Soul Generation Base</h2>
-        <SoulGenerationChart {...deckStats} />
-        <h3 className={"text-center"}>
-          Sum:{" "}
-          {deckStats.soulBase.black +
-            deckStats.soulBase.white +
-            deckStats.soulBase.blue +
-            deckStats.soulBase.green}{" "}
-        </h3>
+      <div className={"grid grid-cols-1 lg:grid-cols-2 gap-2"}>
+        <div>
+          <h2 className={"text-center"}>Soul Generation Base</h2>
+          <SoulGenerationChart {...deckStats} />
+          <h3 className={"text-center"}>
+            Sum:{" "}
+            {deckStats.soulBase.black +
+              deckStats.soulBase.white +
+              deckStats.soulBase.blue +
+              deckStats.soulBase.green}{" "}
+          </h3>
+        </div>
+        <div>
+          <h2 className={"text-center"}>11-Year Curve</h2>
+          <ElevenYearCurveChart {...deckStats} />
+        </div>
       </div>
     </div>
   );

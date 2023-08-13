@@ -1,5 +1,6 @@
 import { DataCard, KryptikDeckDto } from "~/KryptikApiTypes";
 import { soulColorMap } from "~/soulColorMap";
+import * as R from "ramda";
 
 type Color = "white" | "black" | "green" | "blue";
 export type ColorIdentity = Record<Color, boolean>;
@@ -29,6 +30,16 @@ const calculateSoulBase = (deck: DataCard[]) => ({
   blue: countByColor(deck, "blue"),
 });
 
+const calculateElevenYearCurve = (deck: DataCard[]) => {
+  const costs = deck.map((card) => card.elevenYear.cost ?? 0);
+  const highestCost = Math.max(...costs);
+  let curve: number[] = [];
+  for (let i = 0; i <= highestCost; i++) {
+    curve.push(R.count((cost) => cost === i, costs));
+  }
+  return curve;
+};
+
 export const convertToDeckStats = (kryptikDeckDto: KryptikDeckDto) => {
   const deck = kryptikDeckDto.data.deck;
   const profile = kryptikDeckDto.data.user.profile;
@@ -38,6 +49,7 @@ export const convertToDeckStats = (kryptikDeckDto: KryptikDeckDto) => {
     name: deck.name,
     creator: `${profile.firstName} ${profile.lastName}`,
     soulBase: calculateSoulBase(flatDeck),
+    elevenYearCurve: calculateElevenYearCurve(flatDeck),
   };
 };
 

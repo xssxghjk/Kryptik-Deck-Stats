@@ -8,11 +8,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import styles from './tailwind.css'
+import styles from "./tailwind.css";
 
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: styles },
-]
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 export default function App() {
   return (
     <html lang="en">
@@ -22,9 +20,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body        className={
-        'bg-slate-800 w-screen h-screen text-slate-300 overflow-hidden'
-      }>
+      <body className={"bg-slate-800 w-screen h-screen text-slate-300"}>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
