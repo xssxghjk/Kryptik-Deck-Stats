@@ -1,8 +1,8 @@
 import { json, LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Doughnut } from "react-chartjs-2";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { convertToDeckStats, DeckStats } from "~/convertDeckStats";
+import { SoulGenerationChart } from "~/components/SoulGenerationChart";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,24 +21,7 @@ export default function KryptikDeckView() {
       <h3>by {deckStats.creator}</h3>
       <div className={"w-1/2 block m-auto"}>
         <h2 className={"text-center"}>Soul Generation Base</h2>
-        <Doughnut
-          id={"soulBaseChart"}
-          data={{
-            labels: ["White", "Black", "Green", "Blue"],
-            datasets: [
-              {
-                data: [
-                  deckStats.soulBase.white,
-                  deckStats.soulBase.black,
-                  deckStats.soulBase.green,
-                  deckStats.soulBase.blue,
-                ],
-                backgroundColor: ["white", "black", "green", "blue"],
-                hoverOffset: 4,
-              },
-            ],
-          }}
-        />
+        <SoulGenerationChart {...deckStats} />
         <h3 className={"text-center"}>
           Sum:{" "}
           {deckStats.soulBase.black +
