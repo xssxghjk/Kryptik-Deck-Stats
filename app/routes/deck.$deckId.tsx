@@ -1,9 +1,9 @@
 import { json, LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { DataCard, KryptikDeckDto } from "~/KryptikApiTypes";
-import { soulColorMap } from "~/soulColorMap";
 import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
+import { soulColorMap } from "~/soulColorMap";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -30,22 +30,18 @@ const convertToFlatDeck = (kryptikDeckDto: KryptikDeckDto) => {
   return flatDeck;
 };
 
-const calculateSoulBase = (flatDeck: DataCard[]) => {
-  const colorCount: ColorCount = {
-    white: 0,
-    black: 0,
-    green: 0,
-    blue: 0,
-  };
-  flatDeck.forEach((card) => {
-    const generatedSoulColor = soulColorMap[card.soul.generatedSoul];
-    if (generatedSoulColor.blue) colorCount.blue++;
-    if (generatedSoulColor.black) colorCount.black++;
-    if (generatedSoulColor.green) colorCount.green++;
-    if (generatedSoulColor.white) colorCount.white++;
-  });
-  return colorCount;
-};
+const getByColor = (deck: DataCard[], color: Color) =>
+  deck.filter((card) => soulColorMap[card.soul.generatedSoul][color]);
+
+const countByColor = (deck: DataCard[], color: Color) =>
+  getByColor(deck, color).length;
+
+const calculateSoulBase = (deck: DataCard[]) => ({
+  white: countByColor(deck, "white"),
+  black: countByColor(deck, "black"),
+  green: countByColor(deck, "green"),
+  blue: countByColor(deck, "blue"),
+});
 
 const convertToDeckStats = (kryptikDeckDto: KryptikDeckDto) => {
   const deck = kryptikDeckDto.data.deck;
