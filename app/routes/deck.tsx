@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Outlet, useNavigate, useParams } from "@remix-run/react";
+import { Outlet, useNavigate } from "@remix-run/react";
 
 export default function KryptikView() {
   const mainRef = useRef<HTMLElement>(null);

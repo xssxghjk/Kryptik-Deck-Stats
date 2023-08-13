@@ -3,6 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import { convertToDeckStats, DeckStats } from "~/convertDeckStats";
 import { SoulGenerationChart } from "~/components/SoulGenerationChart";
 import { ElevenYearCurveChart } from "~/components/ElevenYearCurveChart";
+import { ChartContainer } from "~/components/ChartContainer";
 
 // Calling the API from the server to avoid CORS issues
 export async function loader({ params }: LoaderArgs) {
@@ -11,6 +12,12 @@ export async function loader({ params }: LoaderArgs) {
   return json(convertToDeckStats(await response.json()));
 }
 
+const calculateSoulBaseSum = (deckStats: DeckStats) =>
+  deckStats.soulBase.black +
+  deckStats.soulBase.white +
+  deckStats.soulBase.blue +
+  deckStats.soulBase.green;
+
 export default function KryptikDeckView() {
   const deckStats = useLoaderData<DeckStats>();
   return (
@@ -18,21 +25,15 @@ export default function KryptikDeckView() {
       <h1>{deckStats?.name}</h1>
       <h3>by {deckStats.creator}</h3>
       <div className={"grid grid-cols-1 lg:grid-cols-2 gap-2"}>
-        <div>
-          <h2 className={"text-center"}>Soul Generation Base</h2>
+        <ChartContainer title={"Soul Generation Base"}>
           <SoulGenerationChart {...deckStats} />
           <h3 className={"text-center"}>
-            Sum:{" "}
-            {deckStats.soulBase.black +
-              deckStats.soulBase.white +
-              deckStats.soulBase.blue +
-              deckStats.soulBase.green}{" "}
+            Sum: {calculateSoulBaseSum(deckStats)}
           </h3>
-        </div>
-        <div>
-          <h2 className={"text-center"}>11-Year Curve</h2>
+        </ChartContainer>
+        <ChartContainer title={"11-Year Curve"}>
           <ElevenYearCurveChart {...deckStats} />
-        </div>
+        </ChartContainer>
       </div>
     </div>
   );
