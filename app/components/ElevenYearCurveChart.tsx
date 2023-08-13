@@ -29,6 +29,7 @@ export const ElevenYearCurveChart = (deckStats: DeckStats) => {
           {
             data: deckStats.elevenYearCurve,
             backgroundColor: "lightgrey",
+            label: "11-Year Cost",
           },
         ],
       }}
