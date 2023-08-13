@@ -16,7 +16,6 @@ export async function loader({ params }: LoaderArgs) {
 
 type Color = "white" | "black" | "green" | "blue";
 export type ColorIdentity = Record<Color, boolean>;
-type ColorCount = Record<Color, number>;
 
 const convertToFlatDeck = (kryptikDeckDto: KryptikDeckDto) => {
   const cards = kryptikDeckDto.data.cards;
